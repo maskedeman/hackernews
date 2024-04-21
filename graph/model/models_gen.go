@@ -18,7 +18,7 @@ type Mutation struct {
 }
 
 type NewLink struct {
-	Text    string `json:"text"`
+	Title   string `json:"title"`
 	Address string `json:"address"`
 }
 

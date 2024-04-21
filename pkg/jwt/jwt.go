@@ -12,11 +12,13 @@ var (
 )
 
 func GenerateToken(username string) (string, error) {
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": username,
 		"iat":      time.Now().Unix(),
 		"exp":      time.Now().Add(time.Hour * 24).Unix(),
 	})
+
 	tokenString, err := token.SignedString(SecretKey)
 	if err != nil {
 		log.Fatal("error generating key")
@@ -29,6 +31,9 @@ func ParseToken(tokenStr string) (string, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		return SecretKey, nil
 	})
+	if err != nil {
+		return "", err
+	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		username := claims["username"].(string)
 		return username, nil
